@@ -1,0 +1,46 @@
+name: immich-distribution-libvips
+base: core20
+version: 8.14.3-dist1
+summary: libvips packaged for Immich Distribution
+description: |
+  libvips packaged for Immich Distribution, this is not intended to be consumed directly.
+architectures:
+  - amd64
+
+grade: stable
+confinement: strict
+
+parts:
+  libvips:
+    plugin: meson
+    meson-version: "1.2.1"
+    source: https://github.com/libvips/libvips/releases/download/v8.14.3/vips-8.14.3.tar.xz
+    source-checksum: "sha256/f884d61a6b54c99cdae855001c8b9523e13b4982be7e76cac03faccb91be105c"
+    build-packages:
+      # From https://github.com/libvips/libvips/wiki/Build-for-Ubuntu
+      - libfftw3-dev
+      - libopenexr-dev
+      - libgsf-1-dev
+      - libglib2.0-dev
+      - liborc-dev
+      - libopenslide-dev
+      - libmatio-dev
+      - libwebp-dev
+      - libjpeg-turbo8-dev
+      - libexpat1-dev
+      - libexif-dev
+      - libtiff5-dev
+      - libcfitsio-dev
+      - libpoppler-glib-dev
+      - librsvg2-dev
+      - libpango1.0-dev
+      - libopenjp2-7-dev
+      - libimagequant-dev
+      # From errors complaining about missing packages during build
+      - libgirepository1.0-dev
+      # Packages enabling more features in libvips
+      - libheif-dev
+      - libtiff-dev
+    stage-snaps:
+      - immich-distribution-imagemagick/latest/stable
+      - immich-distribution-libraw/latest/stable
