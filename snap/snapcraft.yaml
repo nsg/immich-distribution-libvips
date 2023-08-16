@@ -10,14 +10,28 @@ architectures:
 grade: stable
 confinement: strict
 
+apps:
+  vips:
+    command: usr/bin/vips
+
+layout:
+  /usr/etc/ImageMagick-7:
+    symlink: $SNAP/usr/etc/ImageMagick-7
+  /usr/lib/ImageMagick-7.1.1:
+    symlink: $SNAP/usr/lib/ImageMagick-7.1.1
+
 parts:
   libvips:
     plugin: meson
     meson-version: "1.2.1"
+    meson-parameters:
+      - --buildtype=release
+      - --prefix=/usr
+      - --libdir=lib
+      - --default-library=static
     source: https://github.com/libvips/libvips/releases/download/v8.14.3/vips-8.14.3.tar.xz
     source-checksum: "sha256/f884d61a6b54c99cdae855001c8b9523e13b4982be7e76cac03faccb91be105c"
     build-packages:
-      # From https://github.com/libvips/libvips/wiki/Build-for-Ubuntu
       - libfftw3-dev
       - libopenexr-dev
       - libgsf-1-dev
@@ -36,11 +50,60 @@ parts:
       - libpango1.0-dev
       - libopenjp2-7-dev
       - libimagequant-dev
-      # From errors complaining about missing packages during build
       - libgirepository1.0-dev
-      # Packages enabling more features in libvips
+      - liblqr-1-0-dev
       - libheif-dev
       - libtiff-dev
+      - libltdl-dev
+    after:
+      - cgif
+      - dependencies
+    stage-packages:
+      - libaec0
+      - libasn1-8-heimdal
+      - libbrotli1
+      - libcairo-gobject2
+      - libcfitsio8
+      - libcurl3-gnutls
+      - libexif12
+      - libfftw3-double3
+      - libgdk-pixbuf2.0-0
+      - libgsf-1-114
+      - libgssapi3-heimdal
+      - libhcrypto4-heimdal
+      - libhdf5-103
+      - libheimbase1-heimdal
+      - libheimntlm0-heimdal
+      - libhx509-5-heimdal
+      - libimagequant0
+      - libkrb5-26-heimdal
+      - libldap-2.4-2
+      - libmatio9
+      - libnghttp2-14
+      - libnspr4
+      - libnss3
+      - libopenslide0
+      - liborc-0.4-0
+      - libpoppler-glib8
+      - libpoppler97
+      - libpsl5
+      - libroken18-heimdal
+      - librsvg2-2
+      - librtmp1
+      - libsasl2-2
+      - libssh-4
+      - libsz2
+      - libwind0-heimdal
+
+  dependencies:
+    plugin: nil
     stage-snaps:
       - immich-distribution-imagemagick/latest/stable
-      - immich-distribution-libraw/latest/stable
+
+  cgif:
+    plugin: meson
+    meson-version: "1.2.1"
+    source: https://github.com/dloebl/cgif.git
+    source-tag: "V0.3.2"
+    organize:
+      usr/local: usr
