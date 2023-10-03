@@ -1,6 +1,6 @@
 name: immich-distribution-libvips
 base: core20
-version: 8.14.5-dist1
+version: 8.14.5-dist2
 summary: libvips packaged for Immich Distribution
 description: |
   libvips packaged for Immich Distribution, this is not intended to be consumed directly.
